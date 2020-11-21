@@ -181,6 +181,7 @@ namespace KOASampleCS
             if (Error.IsError(e.nErrCode))
             {
                 Logger(Log.일반, "[로그인 처리결과] " + Error.GetErrorMessage());
+                axKHOpenAPI.KOA_Functions("ShowAccountWindow","");
             }
             else
             {
