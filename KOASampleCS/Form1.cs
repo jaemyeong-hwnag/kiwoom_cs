@@ -15,8 +15,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using KiwoomCode;
 
+using KiwoomCode;
+using databaseMySQL;
 
 namespace KOASampleCS
 {
@@ -34,6 +35,7 @@ namespace KOASampleCS
         private string _strRealConScrNum = "0000";
         private string _strRealConName = "0000";
         private int _nIndex = 0;
+        private DBInfo dbInfo = new DBInfo();
 
         private bool _bRealTrade = false;
 
@@ -86,6 +88,10 @@ namespace KOASampleCS
                 case Log.실시간:
                     lst실시간.Items.Add(message);
                     lst실시간.SelectedIndex = lst실시간.Items.Count - 1;
+                    break;
+                case Log.Test:
+                    lstTest.Items.Add(message);
+                    lstTest.SelectedIndex = lstTest.Items.Count - 1;
                     break;
                 default:
                     break;
@@ -172,6 +178,58 @@ namespace KOASampleCS
                         Int32.Parse(axKHOpenAPI.GetCommData(e.sTrCode, "", i, "고가").Trim()),
                         Int32.Parse(axKHOpenAPI.GetCommData(e.sTrCode, "", i, "저가").Trim()));
                 }
+            }
+            // 최초에 모든 종목 insert
+            else if (e.sRQName == "setCodeData")
+            {
+                // DB에 종목 정보를 insert 추후 update로 바꿀 예정
+
+                Logger(Log.조회, "{0} | 현재가:{1:N0} | 등락율:{2} | 거래량:{3:N0} ",
+                       axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "종목명").Trim(),
+                       Int32.Parse(axKHOpenAPI.GetCommData(e.sTrCode, "", 0, "현재가").Trim()),
+                       axKHOpenAPI.GetCommData(e.sTrCode, "", 0, "등락율").Trim(),
+                       Int32.Parse(axKHOpenAPI.GetCommData(e.sTrCode, "", 0, "거래량").Trim())
+                );
+
+                String qeury;
+
+                String[] insertValue = new String[17];
+
+                insertValue[0] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "종목코드").Trim();
+                insertValue[1] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "종목명").Trim();
+                insertValue[2] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "액면가").Trim();
+                insertValue[3] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "자본금").Trim();
+                insertValue[4] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "매출액").Trim();
+                insertValue[5] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "영업이익").Trim();
+                insertValue[6] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "당기순이익").Trim();
+                insertValue[7] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "시가").Trim();
+                insertValue[8] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "고가").Trim();
+                insertValue[9] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "저가").Trim();
+                insertValue[10] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "상한가").Trim();
+                insertValue[11] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "하한가").Trim();
+                insertValue[12] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "기준가").Trim();
+                insertValue[13] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "현재가").Trim();
+                insertValue[14] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "전일대비").Trim();
+                insertValue[15] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "등락률").Trim();
+                insertValue[16] = axKHOpenAPI.GetCommData(e.sTrCode, e.sRQName, 0, "거래량").Trim();
+
+                if (insertValue[15] == "" )
+                {
+                    // 빈값이 리턴되면 query에러로 0을 넣음
+                    insertValue[15] = "0";
+                }
+
+                qeury = "INSERT INTO stock " +
+                    "(code, name, nominal_value, capital, gross_margin, operating_income, " +
+                    "net_income, market_price, high_price, low_price, upper_limit, lower_limit, " +
+                    "reference_price, base_price, DoD, fluctuation_rate, trading_volume) " +
+                    "VALUE(" +
+                    "'" + insertValue[0] + "', '" + insertValue[1] + "', '" + insertValue[2] + "', '" + insertValue[3] + "', '" + insertValue[4] + "', '" +
+                    insertValue[5] + "', '" + insertValue[6] + "', '" + insertValue[7] + "', '" + insertValue[8] + "', '" + insertValue[9] + "', '" +
+                    insertValue[10] + "', '" + insertValue[11] + "', '" + insertValue[12] + "', '" + insertValue[13] + "', '" + insertValue[14] + "', '" +
+                    insertValue[15] + "', '" + insertValue[16] + "'" + 
+                    ")";
+                dbInfo.Execute(qeury);
             }
 
         }
@@ -660,6 +718,21 @@ namespace KOASampleCS
                 btn자동주문.Text = "자동주문 중단";
                 _bRealTrade = true;
                 Logger(Log.일반, "======= 자동 주문 실행 ========");
+            }
+        }
+
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            string codeText = axKHOpenAPI.GetCodeListByMarket("10");
+
+            string[] codeList = codeText.Split(';');
+
+            foreach (string code in codeList)
+            {
+                axKHOpenAPI.SetInputValue("종목코드", code);
+                axKHOpenAPI.CommRqData("setCodeData", "opt10001", 0, GetScrNum());
+                Logger(Log.Test, code);
+                System.Threading.Thread.Sleep(1000);
             }
         }
     }
