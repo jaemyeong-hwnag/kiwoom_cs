@@ -4,41 +4,45 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using System.Diagnostics;
 
 namespace databaseMySQL
 {
     class DBInfo
     {
         private MySqlConnection conn;
-        private MySqlCommand command;
 
         public DBInfo() 
         {
             try {
-                conn = new MySqlConnection("");
+                this.conn = new MySqlConnection("");
+                this.conn.Open();
             } catch (Exception exception) {
-
+                Debug.WriteLine(exception);
             }
         }
 
         public void Execute(string query) 
         {
             try {
-                conn.Open();
-                command = new MySqlCommand(query, conn);
-                conn.Close();
+                MySqlCommand command = new MySqlCommand(query, this.conn);
+                command.ExecuteNonQuery();
             } catch (Exception exception) {
-                
+                Debug.WriteLine(exception);
             }
         }
 
         public MySqlDataReader GetRowData(string query) 
         {
-            conn.Open();
-            command = new MySqlCommand(query, conn);
+            MySqlCommand command = new MySqlCommand(query, this.conn);
             MySqlDataReader row = command.ExecuteReader();
 
             return row;
+        }
+
+        ~DBInfo() 
+        {
+            this.conn.Close();
         }
     }
 }
