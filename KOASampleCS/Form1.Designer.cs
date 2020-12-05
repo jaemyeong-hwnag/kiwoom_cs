@@ -44,6 +44,9 @@
             this.조건검색ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.조건식로컬저장ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.조건명리스트호출ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.주식정보ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.종목입력ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.종목구분ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lst실시간 = new System.Windows.Forms.ListBox();
             this.lst일반 = new System.Windows.Forms.ListBox();
             this.lst조회 = new System.Windows.Forms.ListBox();
@@ -90,6 +93,10 @@
             this.label13 = new System.Windows.Forms.Label();
             this.txt실시간종목코드 = new System.Windows.Forms.TextBox();
             this.btn자동주문 = new System.Windows.Forms.Button();
+            this.btnTest = new System.Windows.Forms.Button();
+            this.txtTest = new System.Windows.Forms.TextBox();
+            this.lstTest = new System.Windows.Forms.ListBox();
+            this.backWorck = new System.ComponentModel.BackgroundWorker();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.axKHOpenAPI)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -103,7 +110,8 @@
             this.기본기능ToolStripMenuItem,
             this.조회기능ToolStripMenuItem,
             this.주문기능ToolStripMenuItem,
-            this.조건검색ToolStripMenuItem});
+            this.조건검색ToolStripMenuItem,
+            this.주식정보ToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
             this.menuStrip.Size = new System.Drawing.Size(1445, 24);
@@ -169,14 +177,14 @@
             // 현재가ToolStripMenuItem
             // 
             this.현재가ToolStripMenuItem.Name = "현재가ToolStripMenuItem";
-            this.현재가ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.현재가ToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.현재가ToolStripMenuItem.Text = "현재가";
             this.현재가ToolStripMenuItem.Click += new System.EventHandler(this.현재가ToolStripMenuItem_Click);
             // 
             // 일봉데이터ToolStripMenuItem
             // 
             this.일봉데이터ToolStripMenuItem.Name = "일봉데이터ToolStripMenuItem";
-            this.일봉데이터ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.일봉데이터ToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.일봉데이터ToolStripMenuItem.Text = "일봉데이터";
             this.일봉데이터ToolStripMenuItem.Click += new System.EventHandler(this.일봉데이터ToolStripMenuItem_Click);
             // 
@@ -217,6 +225,29 @@
             this.조건명리스트호출ToolStripMenuItem.Size = new System.Drawing.Size(178, 22);
             this.조건명리스트호출ToolStripMenuItem.Text = "조건명 리스트 호출";
             this.조건명리스트호출ToolStripMenuItem.Click += new System.EventHandler(this.조건명리스트호출ToolStripMenuItem_Click);
+            // 
+            // 주식정보ToolStripMenuItem
+            // 
+            this.주식정보ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.종목입력ToolStripMenuItem,
+            this.종목구분ToolStripMenuItem});
+            this.주식정보ToolStripMenuItem.Name = "주식정보ToolStripMenuItem";
+            this.주식정보ToolStripMenuItem.Size = new System.Drawing.Size(119, 20);
+            this.주식정보ToolStripMenuItem.Text = "주식정보 업데이트";
+            // 
+            // 종목입력ToolStripMenuItem
+            // 
+            this.종목입력ToolStripMenuItem.Name = "종목입력ToolStripMenuItem";
+            this.종목입력ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.종목입력ToolStripMenuItem.Text = "종목 입력";
+            this.종목입력ToolStripMenuItem.Click += new System.EventHandler(this.종목입력ToolStripMenuItem_Click);
+            // 
+            // 종목구분ToolStripMenuItem
+            // 
+            this.종목구분ToolStripMenuItem.Name = "종목구분ToolStripMenuItem";
+            this.종목구분ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.종목구분ToolStripMenuItem.Text = "종목 구분";
+            this.종목구분ToolStripMenuItem.Click += new System.EventHandler(this.종목구분ToolStripMenuItem_Click);
             // 
             // lst실시간
             // 
@@ -663,11 +694,39 @@
             this.btn자동주문.UseVisualStyleBackColor = true;
             this.btn자동주문.Click += new System.EventHandler(this.btn자동주문_Click);
             // 
+            // btnTest
+            // 
+            this.btnTest.Location = new System.Drawing.Point(275, 408);
+            this.btnTest.Name = "btnTest";
+            this.btnTest.Size = new System.Drawing.Size(206, 23);
+            this.btnTest.TabIndex = 27;
+            this.btnTest.Text = "btnTest";
+            this.btnTest.UseVisualStyleBackColor = true;
+            // 
+            // txtTest
+            // 
+            this.txtTest.Location = new System.Drawing.Point(275, 381);
+            this.txtTest.Name = "txtTest";
+            this.txtTest.Size = new System.Drawing.Size(206, 21);
+            this.txtTest.TabIndex = 28;
+            // 
+            // lstTest
+            // 
+            this.lstTest.FormattingEnabled = true;
+            this.lstTest.ItemHeight = 12;
+            this.lstTest.Location = new System.Drawing.Point(508, 531);
+            this.lstTest.Name = "lstTest";
+            this.lstTest.Size = new System.Drawing.Size(291, 88);
+            this.lstTest.TabIndex = 29;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1445, 536);
+            this.ClientSize = new System.Drawing.Size(1445, 629);
+            this.Controls.Add(this.lstTest);
+            this.Controls.Add(this.txtTest);
+            this.Controls.Add(this.btnTest);
             this.Controls.Add(this.btn자동주문);
             this.Controls.Add(this.group실시간등록해제);
             this.Controls.Add(this.groupBox2);
@@ -774,6 +833,13 @@
         private System.Windows.Forms.Button btn실시간등록;
         private System.Windows.Forms.Button btn실시간해제;
         private System.Windows.Forms.Button btn자동주문;
+        private System.Windows.Forms.Button btnTest;
+        private System.Windows.Forms.TextBox txtTest;
+        private System.Windows.Forms.ListBox lstTest;
+        private System.ComponentModel.BackgroundWorker backWorck;
+        private System.Windows.Forms.ToolStripMenuItem 주식정보ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 종목입력ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 종목구분ToolStripMenuItem;
     }
 }
 
