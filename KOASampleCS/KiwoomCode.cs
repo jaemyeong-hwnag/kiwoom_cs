@@ -11,7 +11,8 @@ namespace KiwoomCode
         조회,     // 조회창 출력
         에러,     // 에러창 출력
         일반,     // 일반창 출력
-        실시간    // 실시간창 출력
+        실시간,     // 실시간창 출력
+        Test    // 테스트 출력
     }
 
     class KOAErrorCode

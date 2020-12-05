@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Auoto.cs" />
+    <Compile Include="DBConnSet.cs" />
     <Compile Include="DBInfo.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
